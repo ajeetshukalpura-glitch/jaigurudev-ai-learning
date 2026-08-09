@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jaigurudev AI Learning – Smart Chatbot</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f4f7fb;color:#172033}
+.header{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;padding:20px;text-align:center}
+.header h1{margin:0 0 6px;font-size:24px}.header p{margin:0;opacity:.9}
+.wrap{max-width:900px;margin:18px auto;padding:0 12px}
+.card{background:white;border-radius:18px;box-shadow:0 8px 30px #00000012;overflow:hidden}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:12px;border-bottom:1px solid #eee}
+.toolbar button,.quick button{border:0;border-radius:10px;padding:9px 12px;background:#eef2ff;color:#3730a3;cursor:pointer}
+.toolbar button:hover,.quick button:hover{background:#ddd6fe}
+#chat{height:430px;overflow:auto;padding:18px;background:#fbfcff}
+.msg{max-width:82%;padding:12px 14px;border-radius:15px;margin:10px 0;line-height:1.5;white-space:pre-wrap}
+.user{margin-left:auto;background:#4f46e5;color:white;border-bottom-right-radius:4px}
+.bot{margin-right:auto;background:#eef2f7;color:#172033;border-bottom-left-radius:4px}
+.name{font-size:12px;font-weight:bold;opacity:.7;margin-bottom:4px}
+.composer{display:flex;gap:8px;padding:12px;border-top:1px solid #eee}
+#msg{flex:1;border:1px solid #d8deea;border-radius:12px;padding:12px;font-size:15px;outline:none}
+#send{border:0;border-radius:12px;background:#4f46e5;color:white;padding:0 18px;font-size:15px;cursor:pointer}
+.quick{padding:0 12px 14px;display:flex;gap:7px;flex-wrap:wrap}
+.status{padding:0 14px 14px;color:#667085;font-size:12px}
+@media(max-width:600px){#chat{height:52vh}.msg{max-width:92%}.composer{position:sticky;bottom:0;background:white}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🎓 Jaigurudev AI Learning</h1>
+  <p>Smart Study Chatbot • Notes • MCQ • Quiz • विषय सहायता</p>
+</div>
+
+<div class="wrap">
+<div class="card">
+  <div class="toolbar">
+    <button onclick="newChat()">🗑️ नई चैट</button>
+    <button onclick="ask('समाजशास्त्र के नोट्स बताओ')">📚 समाजशास्त्र</button>
+    <button onclick="ask('MCQ बनाओ')">📝 MCQ</button>
+    <button onclick="ask('मुझे क्विज दो')">🎯 Quiz</button>
+  </div>
+
+  <div id="chat"></div>
+
+  <div class="quick">
+    <button onclick="ask('कक्षा 10 सामाजिक विज्ञान के नोट्स')">कक्षा 10 नोट्स</button>
+    <button onclick="ask('समाजशास्त्र क्या है?')">समाजशास्त्र</button>
+    <button onclick="ask('5 MCQ बनाओ')">5 MCQ</button>
+    <button onclick="ask('पढ़ाई कैसे करूँ?')">Study Plan</button>
+  </div>
+
+  <div class="composer">
+    <input id="msg" type="text" placeholder="अपना प्रश्न लिखें..." autocomplete="off">
+    <button id="send" onclick="sendMsg()">भेजें</button>
+  </div>
+  <div class="status">ℹ️ यह ऑफलाइन डेमो संस्करण है। इसमें सामान्य अध्ययन-सहायता और तैयार विषय-उत्तर दिए गए हैं।</div>
+</div>
+</div>
+
+<script>
+const chat=document.getElementById('chat');
+const input=document.getElementById('msg');
+
+function addMsg(text,type){
+  const box=document.createElement('div');
+  box.className='msg '+type;
+  const name=document.createElement('div');
+  name.className='name';
+  name.textContent=type==='user'?'आप':'Jaigurudev AI';
+  const body=document.createElement('div');
+  body.textContent=text;
+  box.appendChild(name); box.appendChild(body);
+  chat.appendChild(box); chat.scrollTop=chat.scrollHeight;
+}
+
+function answer(text){
+  const t=text.toLowerCase();
+
+  if(t.includes('समाजशास्त्र')){
+    return 'समाजशास्त्र समाज, सामाजिक संबंधों, संस्थाओं और सामाजिक परिवर्तन का व्यवस्थित अध्ययन है।\\n\\nआप चाहें तो मैं इसी विषय पर:\\n• सरल नोट्स\\n• महत्वपूर्ण प्रश्न-उत्तर\\n• MCQ\\n• परीक्षा-उपयोगी उत्तर\\nतैयार कर सकता हूँ।';
+  }
+  if(t.includes('mcq') || t.includes('बहुविकल्प')){
+    return 'समाजशास्त्र – 5 अभ्यास MCQ:\\n\\n1. समाजशास्त्र का मुख्य अध्ययन क्या है?\\nA) समाज  B) केवल जीव-जंतु  C) केवल मौसम  D) केवल गणित\\nउत्तर: A\\n\\n2. सामाजिक परिवर्तन का संबंध किससे है?\\nA) समाज में बदलाव  B) केवल खेती  C) केवल खेल  D) केवल भाषा\\nउत्तर: A\\n\\n3. परिवार किस प्रकार की संस्था है?\\nA) सामाजिक  B) केवल आर्थिक  C) केवल राजनीतिक  D) प्राकृतिक संसाधन\\nउत्तर: A';
+  }
+  if(t.includes('क्विज') || t.includes('quiz')){
+    return '🎯 क्विज प्रश्न:\\n\\nभारत में लोकतंत्र की सबसे महत्वपूर्ण विशेषता क्या मानी जाती है?\\nA) जनभागीदारी\\nB) केवल राजा का शासन\\nC) वंशानुगत शासन\\nD) कोई चुनाव नहीं\\n\\nअपना उत्तर A/B/C/D में भेजें।';
+  }
+  if(t.includes('नोट्स')){
+    return '📚 नोट्स बनाने के लिए कक्षा और अध्याय का नाम लिखें।\\nउदाहरण: “कक्षा 10 सामाजिक विज्ञान – कृषि” या “कक्षा 12 समाजशास्त्र – सामाजिक स्तरीकरण”।';
+  }
+  if(t.includes('पढ़ाई') || t.includes('study')){
+    return '📅 सरल Study Plan:\\n\\n1. 45 मिनट – नया अध्याय\\n2. 15 मिनट – ब्रेक\\n3. 30 मिनट – प्रश्न-उत्तर\\n4. 20 मिनट – MCQ अभ्यास\\n5. रात में 15 मिनट – रिविजन\\n\\nरोज थोड़ा-थोड़ा पढ़ना सबसे उपयोगी है।';
+  }
+  if(t.includes('नमस्ते') || t.includes('hello') || t.includes('hi')){
+    return 'नमस्ते! 🙏 मैं Jaigurudev AI Learning Chatbot हूँ।\\nआप नोट्स, MCQ, Quiz, प्रश्न-उत्तर या Study Plan के लिए पूछ सकते हैं।';
+  }
+  return 'मैं आपकी पढ़ाई में मदद कर सकता हूँ। कृपया विषय/कक्षा बताइए।\\n\\nउदाहरण:\\n• कक्षा 10 सामाजिक विज्ञान के नोट्स\\n• समाजशास्त्र समझाओ\\n• 10 MCQ बनाओ\\n• मुझे क्विज दो';
+}
+
+function sendMsg(){
+  const text=input.value.trim();
+  if(!text) return;
+  addMsg(text,'user');
+  input.value='';
+  setTimeout(()=>addMsg(answer(text),'bot'),250);
+}
+function ask(text){input.value=text;sendMsg();}
+function newChat(){
+  chat.innerHTML='';
+  addMsg('नमस्ते! 🙏 Jaigurudev AI Learning में आपका स्वागत है।\\nमैं Notes, MCQ, Quiz और Study Plan में मदद कर सकता हूँ।','bot');
+}
+input.addEventListener('keydown',e=>{if(e.key==='Enter')sendMsg();});
+newChat();
+</script>
+</body>
+</html>
